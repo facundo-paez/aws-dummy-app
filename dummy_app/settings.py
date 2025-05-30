@@ -50,7 +50,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    'app_users'
+    'app_users',
+
+    'storages',
 ]
 
 MIDDLEWARE = [
@@ -146,7 +148,7 @@ AWS_S3_REGION_NAME = get_param('S3_REGION_NAME')
 AWS_STATICFILES_STORAGE_BUCKET_NAME = get_param('STATICFILES_STORAGE_BUCKET_NAME')
 AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com'
 AWS_S3_OBJECT_PARAMETERS = {'CacheControl': 'max-age=86400'}
-AWS_QUERYSTRING_AUTH = True
+AWS_QUERYSTRING_AUTH = False
 AWS_QUERYSTRING_EXPIRE = 60
 AWS_DEFAULT_ACL = None
 AWS_S3_ADDRESSING_STYLE = 'virtual'
@@ -155,6 +157,9 @@ AWS_S3_USE_SSL = True
 AWS_STATIC_LOCATION = get_param('STATIC_LOCATION')
 
 STORAGES = {
+    "default": {
+        "BACKEND": "storages.backends.s3boto3.S3Boto3Storage",
+    },
     "staticfiles": {"BACKEND": "storage_backends.StaticStorage"},
 }
 
@@ -162,5 +167,6 @@ STATIC_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/{AWS_STATIC_LOCATION}/"
 
 MEDIA_URL = "/media/"
 
-STATICFILES_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
-DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+# Pueden causar conflicto -> lo maneja django-storages[boto3]
+# STATICFILES_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
+# DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
