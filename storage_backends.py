@@ -4,5 +4,5 @@ from dummy_app.settings import get_param
 
 class StaticStorage(S3Boto3Storage):
     location = get_param('STATIC_LOCATION')
-    default_acl = 'public-read'
+    # default_acl = 'public-read' # Genera error
     # custom_domain = f"{get_param('STORAGE_BUCKET_NAME')}.s3.amazonaws.com"
