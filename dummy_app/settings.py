@@ -140,21 +140,39 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # AWS S3
-AWS_ACCESS_KEY_ID = get_param('ACCESS_KEY_ID')
-AWS_SECRET_ACCESS_KEY = get_param('SECRET_ACCESS_KEY')
-AWS_STORAGE_BUCKET_NAME = get_param('STORAGE_BUCKET_NAME')
-AWS_S3_REGION_NAME = get_param('S3_REGION_NAME')
+# AWS_ACCESS_KEY_ID = get_param('ACCESS_KEY_ID')
+# AWS_SECRET_ACCESS_KEY = get_param('SECRET_ACCESS_KEY')
+# AWS_STORAGE_BUCKET_NAME = get_param('STORAGE_BUCKET_NAME')
+# AWS_S3_REGION_NAME = get_param('S3_REGION_NAME')
 
-AWS_STATICFILES_STORAGE_BUCKET_NAME = get_param('STATICFILES_STORAGE_BUCKET_NAME')
+# AWS_STATICFILES_STORAGE_BUCKET_NAME = get_param('STATICFILES_STORAGE_BUCKET_NAME')
+# AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com'
+# AWS_S3_OBJECT_PARAMETERS = {'CacheControl': 'max-age=86400'}
+# AWS_QUERYSTRING_AUTH = False
+# AWS_QUERYSTRING_EXPIRE = 60
+# AWS_DEFAULT_ACL = None
+# AWS_S3_ADDRESSING_STYLE = 'virtual'
+# AWS_S3_USE_SSL = True
+
+# AWS_STATIC_LOCATION = get_param('STATIC_LOCATION')
+
+# 
+
+AWS_ACCESS_KEY_ID = None  # No necesitas esto si usas Role de EC2
+AWS_SECRET_ACCESS_KEY = None
+
+AWS_STORAGE_BUCKET_NAME = 'statics-dummy-app'
+AWS_S3_REGION_NAME = 'us-east-1'  # Ajusta si estás en otra región
+
 AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com'
-AWS_S3_OBJECT_PARAMETERS = {'CacheControl': 'max-age=86400'}
-AWS_QUERYSTRING_AUTH = False
-AWS_QUERYSTRING_EXPIRE = 60
-AWS_DEFAULT_ACL = None
-AWS_S3_ADDRESSING_STYLE = 'virtual'
-AWS_S3_USE_SSL = True
 
-AWS_STATIC_LOCATION = get_param('STATIC_LOCATION')
+AWS_S3_FILE_OVERWRITE = False
+AWS_DEFAULT_ACL = None
+AWS_QUERYSTRING_AUTH = False
+
+STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+
+STATIC_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/static/'
 
 STORAGES = {
     "default": {
@@ -163,9 +181,9 @@ STORAGES = {
     "staticfiles": {"BACKEND": "storage_backends.StaticStorage"},
 }
 
-STATIC_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/{AWS_STATIC_LOCATION}/"
+# STATIC_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/{AWS_STATIC_LOCATION}/"
 
-MEDIA_URL = "/media/"
+# MEDIA_URL = "/media/"
 
 # Pueden causar conflicto -> lo maneja django-storages[boto3]
 # STATICFILES_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
